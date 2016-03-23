@@ -1,0 +1,81 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="apple-mobile-web-app-title" content="Password" />
+		<meta name="viewport" content="user-scalable=0, initial-scale=1.0">
+		<!--<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>-->
+		<meta name="format-detection" content="telephone=no">
+		<link rel="apple-touch-icon" href="http://7xj2y5.com1.z0.glb.clouddn.com/liu.png" /> 
+		<title>Password</title>
+		<link href="./css/style.css" rel="stylesheet">
+		<link rel="apple-touch-startup-image" href="img/iphone.png" />
+		<link rel="apple-touch-startup-image" href="img/iphone5.png" media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" />
+		
+		<script src="js/jquery.min.js"></script>
+		<script src="js/md5.js"></script>
+		<script src="js/password.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$('#password').change(countCode);
+				$('#key').change(countCode);
+				$('#password').keyup(countCode);
+				$('#key').keyup(countCode);
+				/*百度接口根据IP获取当前地址*/
+				$.getJSON("http://api.map.baidu.com/location/ip?ak=huGDrrtkgteDGmZPE4EwiTNY&callback=?",function(data){ 
+					console.log(data); 
+					var x=document.getElementById("addr");
+					x.innerHTML="您的当前位置："+data.content.address;
+					weather(data);
+				}); 
+			});
+			$(document).ready(function(){
+				$("#code16").focus(function(){
+					$("#code16").css("color","#FF00FF");
+					this.select();
+					this.setSelectionRange(0, 9999);
+				});
+				$("#code16").blur(function(){
+					$("#code16").css("color","#00DD00");
+				});
+			});
+			/*百度天气接口*/
+			function weather(data) {
+				$.ajax({
+					url: 'http://api.map.baidu.com/telematics/v3/weather?location='+data.content.address_detail.city+'&output=json&ak=huGDrrtkgteDGmZPE4EwiTNY',
+					type: 'get',
+					dataType: 'jsonp',
+					//jsonp: 'jsoncallback',
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					success: function(result) {
+						console.log(result);
+						var weather_detail = result.results[0].weather_data[0];
+						var y=document.getElementById("todayweather");
+						y.innerHTML="今日天气："+weather_detail.date+" "+weather_detail.temperature+" "+weather_detail.weather+" "+weather_detail.wind;
+					},
+				})
+			}
+		</script>
+	</head>
+<body>
+<form id="loginform">
+	<input id="password" type="password" class="input" />
+	<input id="key" "type="text" class="input" /> 
+	<input id="code16" "type="text" class="inputFinalCode" /> 
+<!--<input id="copyPassword" type="button" class="loginbutton" value="copy" />-->
+</form>
+</br></br></br></br>
+<a href="http://raulism.gitcafe.io">Click here to my blog</a>
+</br>
+<a href="sms:18013981117">Send me SMS</a>
+</br></br></br></br>
+<small id="addr" class="plug">您的当前位置：</small>
+</br>
+<small id="todayweather" class="plug">今日天气：</small>
+</body>
+</html>

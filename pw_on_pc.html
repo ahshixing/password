@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>Password</title>
+		<link href="img/favicon.ico" rel="shortcut icon" />
+		<script src="js/jquery.min.js"></script>
+		<script src="js/md5.js"></script>
+		<script src="js/password.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$('#password').change(countCode);
+				$('#key').change(countCode);
+				$('#password').keyup(countCode);
+				$('#key').keyup(countCode);
+				/*百度接口根据IP获取当前地址*/
+				$.getJSON("http://api.map.baidu.com/location/ip?ak=huGDrrtkgteDGmZPE4EwiTNY&callback=?",function(data){ 
+					console.log(data); 
+					var x=document.getElementById("addr");
+					x.innerHTML="您的当前位置："+data.content.address;
+					weather(data);
+				}); 
+			});
+			/*百度天气接口*/
+			function weather(data) {
+				$.ajax({
+					url: 'http://api.map.baidu.com/telematics/v3/weather?location='+data.content.address_detail.city+'&output=json&ak=huGDrrtkgteDGmZPE4EwiTNY',
+					type: 'get',
+					dataType: 'jsonp',
+					//jsonp: 'jsoncallback',
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					success: function(result) {
+						console.log(result);
+						var weather_detail = result.results[0].weather_data[0];
+						var y=document.getElementById("todayweather");
+						y.innerHTML="今日天气："+weather_detail.date+" "+weather_detail.temperature+" "+weather_detail.weather+" "+weather_detail.wind;
+					},
+				})
+			}
+		</script>
+	</head>
+	<body>
+		<form style="text-align:center">
+  			<p><input id="password" name="password" type="password" autofocus="autofocus" value="" style="width:300px;font-size:20pt;border:2px solid;"></p>
+            <p><input id="key" name="key" type="text" value="" style="width:300px;font-size:20pt;border:2px solid;"></p>
+            <p><input type="text" id="code16" name="code16d" readonly="readonly" style="width:300px;font-size:20pt;color:green;font-weight:bold;border:2px solid;"></p>
+			<small><p id="addr">您的当前位置：</p></small>
+			<small><p id="todayweather">今日天气：</p></small>
+		</form>
+	</body>
+</html>
