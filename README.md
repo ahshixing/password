@@ -1,3 +1,3 @@
 # 密码生成工具
 
-访问URL:http://ahshixing.github.io/password/pw_on_pc.html
+访问URL:http://ahshixing.github.io/password
